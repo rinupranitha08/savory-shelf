@@ -8,9 +8,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Routes without /api prefix since they're served via /api rewrite
-app.use('/recipes', recipesRouter);
-app.use('/auth', authRouter);
+// Mount routes with /api prefix
+app.use('/api/recipes', recipesRouter);
+app.use('/api/auth', authRouter);
 
 app.get('/', (req, res) => res.send('Recipe API running'));
 
