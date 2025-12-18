@@ -10,13 +10,25 @@ async function connect() {
   if (cached.conn) return cached.conn;
   if (!cached.promise) {
     const uri = process.env.MONGO_URI;
-    cached.promise = mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }).then(m => m);
+    if (!uri) {
+      throw new Error('MONGO_URI environment variable is not set');
+    }
+    cached.promise = mongoose.connect(uri, { 
+      useNewUrlParser: true, 
+      useUnifiedTopology: true,
+      serverSelectionTimeoutMS: 5000,
+    }).then(m => m);
   }
   cached.conn = await cached.promise;
   return cached.conn;
 }
 
 module.exports = async (req, res) => {
-  await connect();
+  try {
+    await connect();
+  } catch (err) {
+    console.error('Database connection error:', err);
+    return res.status(500).json({ message: 'Database connection failed', error: err.message });
+  }
   return app(req, res);
 };
