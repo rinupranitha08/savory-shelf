@@ -1,16 +1,6 @@
 {
   "buildCommand": "npm run build:client",
   "outputDirectory": "client/dist",
-  "functions": {
-    "server/api/index.js": {
-      "memory": 1024,
-      "maxDuration": 60
-    },
-    "server/api/[...path].js": {
-      "memory": 1024,
-      "maxDuration": 60
-    }
-  },
   "rewrites": [
     {
       "source": "/api/:path*",
